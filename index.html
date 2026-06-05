@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wayne Enterprises - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #1A1A1A;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(20, 20, 30, 0.9);
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid #d4af37;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d4af37;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #d4af37, #f0e68c);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #f0e68c, #d4af37);
+            transform: scale(1.02);
+        }
+
+        .secret-hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 30px;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🦇</div>
+        <h1>Wayne Enterprises</h1>
+        <p class="subtitle">Enterprise Management Portal</p>
+        
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Employee ID">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        
+        <button onclick="authenticate()">LOGIN</button>
+        
+        <p class="secret-hint">🔐 Find the hidden access code in Wayne Tower...</p>
+    </div>
+
+    <script>
+        function authenticate() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'batman' && password === '2089') {
+                window.location.href = 'dashboard_final.html';
+            } else if (username === 'wayne' && password === 'enterprises') {
+                window.location.href = 'dashboard_final.html';
+            } else if (username === '' || password === '') {
+                alert('Enter credentials');
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') authenticate();
+        });
+    </script>
+</body>
+</html>

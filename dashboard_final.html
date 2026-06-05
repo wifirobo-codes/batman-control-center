@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batman Control Center</title>
+    <style>
+        :root {
+            --color: #7BFF70;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Courier New', monospace; background: #1A1A1A; color: var(--color); line-height: 1.5;">
+    <div style="background: #1A1A1A; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--color);">
+        <div style="font-size: 18px; font-weight: bold;">BATMAN CONTROL CENTER</div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <span style="width: 8px; height: 8px; background: var(--color); border-radius: 50%; display: inline-block; animation: blink 1s infinite;"></span>
+            ONLINE
+            <select id="themeSelector" onchange="changeTheme(this.value)" style="background: #1A1A1A; color: var(--color); border: 1px solid var(--color); padding: 5px 10px; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; cursor: pointer;">
+                <option value="green">GREEN</option>
+                <option value="blue">BLUE</option>
+                <option value="red">RED</option>
+            </select>
+            <button onclick="logout()" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 5px 10px; font-family: 'Courier New', monospace; font-size: 11px; cursor: pointer; border-radius: 2px;">LOGOUT</button>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 8px; background: #1A1A1A; padding: 10px 15px; border-bottom: 1px solid var(--color); overflow-x: auto; flex-wrap: wrap;">
+        <button class="tab-btn" data-tab="missions" onclick="switchTab('missions')" style="background: var(--color); color: #1A1A1A; border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">MISSIONS</button>
+        <button class="tab-btn" data-tab="allies" onclick="switchTab('allies')" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">ALLIES</button>
+        <button class="tab-btn" data-tab="equipment" onclick="switchTab('equipment')" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">EQUIPMENT</button>
+        <button class="tab-btn" data-tab="map" onclick="switchTab('map')" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">MAP</button>
+        <button class="tab-btn" data-tab="music" onclick="switchTab('music')" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">MUSIC</button>
+        <button class="tab-btn" data-tab="wayne" onclick="switchTab('wayne')" style="background: transparent; color: var(--color); border: 1px solid var(--color); padding: 6px 12px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 11px; border-radius: 2px; white-space: nowrap;">WAYNE</button>
+    </div>
+
+    <div style="padding: 15px; max-width: 1000px; margin: 0 auto;">
+        <section id="missions" style="display: block;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">MISSIONS</div>
+                <input type="text" id="taskInput" placeholder="Add mission..." style="width: 100%; background: #1A1A1A; border: 1px solid var(--color); color: var(--color); padding: 7px; margin: 6px 0; border-radius: 2px; font-family: 'Courier New', monospace; font-size: 11px;">
+                <select id="taskPriority" style="width: 100%; background: #1A1A1A; border: 1px solid var(--color); color: var(--color); padding: 7px; margin: 6px 0; border-radius: 2px; font-family: 'Courier New', monospace; font-size: 11px;">
+                    <option value="low">Priority: LOW</option>
+                    <option value="medium" selected>Priority: MEDIUM</option>
+                    <option value="high">Priority: HIGH</option>
+                    <option value="critical">Priority: CRITICAL</option>
+                </select>
+                <button onclick="addTask()" style="background: var(--color); color: #1A1A1A; border: none; padding: 8px 12px; border-radius: 2px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; font-size: 11px; width: 100%; margin-top: 6px; transition: 0.15s;" onmouseover="this.style.opacity='0.8';" onmouseout="this.style.opacity='1';">ADD MISSION</button>
+                <div id="taskList"></div>
+            </div>
+        </section>
+
+        <section id="allies" style="display: none;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">COMMUNICATION</div>
+                <select id="allySelect" style="width: 100%; background: #1A1A1A; border: 1px solid var(--color); color: var(--color); padding: 7px; margin: 6px 0; border-radius: 2px; font-family: 'Courier New', monospace; font-size: 11px;">
+                    <option value="">Select Ally</option>
+                    <option value="Robin">Robin</option>
+                    <option value="Batgirl">Batgirl</option>
+                    <option value="Nightwing">Nightwing</option>
+                    <option value="Oracle">Oracle</option>
+                </select>
+                <textarea id="messageInput" placeholder="Type message..." style="width: 100%; min-height: 60px; resize: vertical; background: #1A1A1A; border: 1px solid var(--color); color: var(--color); padding: 7px; margin: 6px 0; border-radius: 2px; font-family: 'Courier New', monospace; font-size: 11px;"></textarea>
+                <button onclick="sendMessage()" style="background: var(--color); color: #1A1A1A; border: none; padding: 8px 12px; border-radius: 2px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; font-size: 11px; width: 100%; margin-top: 6px; transition: 0.15s;" onmouseover="this.style.opacity='0.8';" onmouseout="this.style.opacity='1';">SEND</button>
+                <div id="messageList"></div>
+            </div>
+        </section>
+
+        <section id="equipment" style="display: none;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">EQUIPMENT</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 10px;">
+                    <div id="eq-batmobile" onclick="handleEquipmentClick('batmobile')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">BATMOBILE</div>
+                        <div id="status-batmobile" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                    <div id="eq-batplane" onclick="handleEquipmentClick('batplane')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">BATPLANE</div>
+                        <div id="status-batplane" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                    <div id="eq-suit" onclick="handleEquipmentClick('suit')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">BATSUIT</div>
+                        <div id="status-suit" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                    <div id="eq-grapple" onclick="handleEquipmentClick('grapple')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">GRAPPLE GUN</div>
+                        <div id="status-grapple" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                    <div id="eq-scanner" onclick="handleEquipmentClick('scanner')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">SCANNER</div>
+                        <div id="status-scanner" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                    <div id="eq-smoke" onclick="handleEquipmentClick('smoke')" style="background: #1A1A1A; border: 1px solid var(--color); padding: 15px 10px; border-radius: 2px; text-align: center; cursor: pointer; transition: 0.15s; font-size: 11px; color: var(--color);">
+                        <div style="font-weight: bold;">SMOKE BOMB</div>
+                        <div id="status-smoke" style="font-size: 10px; color: var(--color); margin-top: 6px; font-weight: bold;">READY</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="map" style="display: none;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">GOTHAM MAP</div>
+                <div id="gothamMap" style="width: 100%; height: 350px; background: #111; border: 1px solid var(--color); border-radius: 2px; margin-top: 10px; position: relative; overflow: hidden; background-image: radial-gradient(rgba(0, 0, 0, 0) 95%, rgba(0, 0, 0, 0.5) 100%), linear-gradient(to right, rgba(123, 255, 112, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(123, 255, 112, 0.05) 1px, transparent 1px); background-size: 100% 100%, 25px 25px, 25px 25px;"></div>
+            </div>
+        </section>
+
+        <section id="music" style="display: none;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">MUSIC</div>
+                <div style="background: #1A1A1A; padding: 10px; border-radius: 2px; border: 1px solid var(--color); margin-top: 10px;">
+                    <audio id="audioPlayer" controls style="width: 100%; margin: 8px 0; height: 28px;"></audio>
+                    <div id="playlist"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wayne" style="display: none;">
+            <div style="background: #1A1A1A; border: 1px solid var(--color); padding: 12px; border-radius: 2px; margin-bottom: 12px;">
+                <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">WAYNE ENTERPRISES</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;">
+                    <div style="background: #1A1A1A; padding: 10px; border-radius: 2px; border: 1px solid var(--color); text-align: center; color: var(--color); font-size: 10px;">
+                        <h3 style="font-size: 12px; margin-bottom: 5px;">REVENUE</h3>
+                        <div style="font-size: 16px; font-weight: bold; margin: 4px 0;">$2.4B</div>
+                        <div>+5.2%</div>
+                    </div>
+                    <div style="background: #1A1A1A; padding: 10px; border-radius: 2px; border: 1px solid var(--color); text-align: center; color: var(--color); font-size: 10px;">
+                        <h3 style="font-size: 12px; margin-bottom: 5px;">EMPLOYEES</h3>
+                        <div style="font-size: 16px; font-weight: bold; margin: 4px 0;">50K+</div>
+                        <div>GLOBAL</div>
+                    </div>
+                    <div style="background: #1A1A1A; padding: 10px; border-radius: 2px; border: 1px solid var(--color); text-align: center; color: var(--color); font-size: 10px;">
+                        <h3 style="font-size: 12px; margin-bottom: 5px;">PROJECTS</h3>
+                        <div style="font-size: 16px; font-weight: bold; margin: 4px 0;">127</div>
+                        <div>ACTIVE</div>
+                    </div>
+                    <div style="background: #1A1A1A; padding: 10px; border-radius: 2px; border: 1px solid var(--color); text-align: center; color: var(--color); font-size: 10px;">
+                        <h3 style="font-size: 12px; margin-bottom: 5px;">R&D</h3>
+                        <div style="font-size: 16px; font-weight: bold; margin: 4px 0;">$890M</div>
+                        <div>BUDGET</div>
+                    </div>
+                </div>
+                <div style="margin-top: 12px;">
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid var(--color); padding-bottom: 8px; color: var(--color);">NEWS</div>
+                    <div id="announcements"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        @keyframes pulse-crime {
+            0%, 100% { box-shadow: 0 0 2px #9C0003; }
+            50% { box-shadow: 0 0 5px #9C0003; }
+        }
+        .crime-marker {
+            animation: pulse-crime 1.5s infinite;
+        }
+    </style>
+
+    <script>
+        let currentColor = '#7BFF70';
+        let activeTab = 'missions';
+        let equipmentStates = {
+            batmobile: { status: 'READY', timer: null },
+            batplane: { status: 'READY', timer: null },
+            suit: { status: 'READY', timer: null },
+            grapple: { status: 'READY', timer: null },
+            scanner: { status: 'READY', timer: null },
+            smoke: { status: 'READY', timer: null }
+        };
+
+        function switchTab(tabName) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(s => s.style.display = 'none');
+            document.getElementById(tabName).style.display = 'block';
+            
+            activeTab = tabName;
+            updateTabStyles();
+            
+            if (tabName === 'map') generateMap();
+            if (tabName === 'music') loadPlaylist();
+            if (tabName === 'wayne') loadWayneData();
+        }
+
+        function updateTabStyles() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => {
+                if (t.getAttribute('data-tab') === activeTab) {
+                    t.style.background = currentColor;
+                    t.style.color = '#1A1A1A';
+                    t.style.borderColor = currentColor;
+                } else {
+                    t.style.background = 'transparent';
+                    t.style.color = currentColor;
+                    t.style.borderColor = currentColor;
+                }
+            });
+        }
+
+        function changeTheme(color) {
+            const colors = { green: '#7BFF70', blue: '#04FFFA', red: '#9C0003' };
+            currentColor = colors[color];
+            document.documentElement.style.setProperty('--color', currentColor);
+            localStorage.setItem('theme', color);
+            
+            // Re-apply dynamically configured terminal map background grids
+            const mapContainer = document.getElementById('gothamMap');
+            if(mapContainer) {
+                mapContainer.style.backgroundImage = `radial-gradient(rgba(0, 0, 0, 0) 95%, rgba(0, 0, 0, 0.5) 100%), linear-gradient(to right, ${currentColor}0D 1px, transparent 1px), linear-gradient(to bottom, ${currentColor}0D 1px, transparent 1px)`;
+            }
+
+            updateTabStyles();
+            renderTasks();
+            renderMessages();
+            updateEquipmentUI();
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const priority = document.getElementById('taskPriority').value;
+            const taskText = taskInput.value.trim();
+            
+            if (!taskText) { alert('Enter mission'); return; }
+            
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            tasks.push({ id: Date.now(), text: taskText, priority: priority, completed: false });
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            
+            taskInput.value = '';
+            document.getElementById('taskPriority').value = 'medium';
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            tasks.sort((a, b) => {
+                const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            }).forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.style.cssText = `background: #1A1A1A; padding: 8px; margin: 6px 0; border-left: 2px solid ${currentColor}; border-radius: 1px; display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: ${currentColor}; ${task.completed ? 'opacity: 0.4; text-decoration: line-through;' : ''}`;
+                taskItem.innerHTML = `
+                    <div style="flex: 1;"><strong>[${task.priority.toUpperCase()}]</strong> ${task.text}</div>
+                    <div style="display: flex; gap: 4px;">
+                        <button onclick="toggleTask(${task.id})" style="background: ${currentColor}; color: #1A1A1A; border: none; padding: 3px 8px; border-radius: 1px; cursor: pointer; font-size: 10px; font-weight: bold;">${task.completed ? 'UNDO' : 'DONE'}</button>
+                        <button onclick="deleteTask(${task.id})" style="background: #9C0003; color: white; border: none; padding: 3px 8px; border-radius: 1px; cursor: pointer; font-size: 10px; font-weight: bold;">DEL</button>
+                    </div>
+                `;
+                taskList.appendChild(taskItem);
+            });
+        }
+
+        function toggleTask(id) {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const task = tasks.find(t => t.id === id);
+            if (task) task.completed = !task.completed;
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            localStorage.setItem('tasks', JSON.stringify(tasks.filter(t => t.id !== id)));
+            renderTasks();
+        }
+
+        function sendMessage() {
+            const ally = document.getElementById('allySelect').value;
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!ally || !message) { alert('Select ally and enter message'); return; }
+            
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.push({ id: Date.now(), ally: ally, text: message, time: new Date().toLocaleTimeString(), sender: 'Batman' });
+            localStorage.setItem('messages', JSON.stringify(messages));
+            
+            document.getElementById('messageInput').value = '';
+            renderMessages();
+
+            // Simulate automatic interactive ally response
+            setTimeout(() => {
+                generateAllyResponse(ally, message);
+            }, 1000);
+        }
+
+        function generateAllyResponse(ally, userMessage) {
+            let replyText = "Acknowledged, Batman. Standing by.";
+            const cleanMsg = userMessage.toLowerCase();
+
+            if (cleanMsg.includes('hi') || cleanMsg.includes('hello')) {
+                replyText = `Hello, Batman. What is the situation?`;
+            } else if (cleanMsg.includes('status') || cleanMsg.includes('report')) {
+                replyText = `All sectors clear under my watch. Updates uploaded to control link.`;
+            } else if (cleanMsg.includes('help') || cleanMsg.includes('need you')) {
+                replyText = `Heading to your exact coordinates now. Secure the perimeter.`;
+            }
+
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.push({ id: Date.now(), ally: ally, text: replyText, time: new Date().toLocaleTimeString(), sender: ally });
+            localStorage.setItem('messages', JSON.stringify(messages));
+            renderMessages();
+        }
+
+        function renderMessages() {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = messages.length > 0 ? `<div style="font-size: 14px; font-weight: bold; margin-bottom: 8px; margin-top: 12px; text-transform: uppercase; border-bottom: 1px solid ${currentColor}; padding-bottom: 8px; color: ${currentColor};">CONVERSATIONS</div>` : '';
+            
+            messages.slice().reverse().forEach(msg => {
+                const messageItem = document.createElement('div');
+                messageItem.style.cssText = `background: #1A1A1A; padding: 8px; margin: 6px 0; border-left: 2px solid ${currentColor}; border-radius: 1px; font-size: 11px; color: ${currentColor};`;
+                messageItem.innerHTML = `
+                    <div style="font-weight: bold; font-size: 10px;">FROM: ${msg.sender.toUpperCase()} (ALLY: ${msg.ally.toUpperCase()})</div>
+                    <div style="margin-top: 2px;">${msg.text}</div>
+                    <div style="font-size: 9px; color: #666; margin-top: 2px;">${msg.time}</div>
+                `;
+                messageList.appendChild(messageItem);
+            });
+        }
+
+        function handleEquipmentClick(id) {
+            let eq = equipmentStates[id];
+            let statusEl = document.getElementById('status-' + id);
+            let cardEl = document.getElementById('eq-' + id);
+
+            if (eq.status === 'READY') {
+                eq.status = 'DEPLOYING';
+                statusEl.innerText = 'DEPLOYING...';
+                cardEl.style.background = 'rgba(255, 255, 255, 0.05)';
+                
+                eq.timer = setTimeout(() => {
+                    eq.status = 'DEPLOYED';
+                    statusEl.innerText = 'DEPLOYED';
+                    cardEl.style.background = currentColor;
+                    cardEl.style.color = '#1A1A1A';
+                }, 5000);
+            } else if (eq.status === 'DEPLOYED') {
+                if(eq.timer) clearTimeout(eq.timer);
+                eq.status = 'READY';
+                statusEl.innerText = 'READY';
+                cardEl.style.background = '#1A1A1A';
+                cardEl.style.color = currentColor;
+            }
+        }
+
+        function updateEquipmentUI() {
+            Object.keys(equipmentStates).forEach(id => {
+                let eq = equipmentStates[id];
+                let statusEl = document.getElementById('status-' + id);
+                let cardEl = document.getElementById('eq-' + id);
+                if(!statusEl || !cardEl) return;
+
+                if (eq.status === 'DEPLOYED') {
+                    cardEl.style.background = currentColor;
+                    cardEl.style.color = '#1A1A1A';
+                    statusEl.innerText = 'DEPLOYED';
+                    statusEl.style.color = '#1A1A1A';
+                } else {
+                    cardEl.style.background = '#1A1A1A';
+                    cardEl.style.color = currentColor;
+                    statusEl.style.color = currentColor;
+                    statusEl.innerText = eq.status === 'DEPLOYING' ? 'DEPLOYING...' : 'READY';
+                }
+            });
+        }
+
+        function generateMap() {
+            const mapDiv = document.getElementById('gothamMap');
+            mapDiv.innerHTML = '';
+            
+            const crimeLocations = [
+                { name: 'Amusement Mile', x: 15, y: 20 },
+                { name: 'Park Row', x: 45, y: 30 },
+                { name: 'Crime Alley', x: 25, y: 60 },
+                { name: 'Downtown', x: 70, y: 50 },
+                { name: 'Narrows', x: 55, y: 75 },
+                { name: 'East End', x: 80, y: 65 }
+            ];
+            
+            crimeLocations.forEach(location => {
+                const marker = document.createElement('div');
+                marker.className = 'crime-marker';
+                marker.style.cssText = `position: absolute; width: 14px; height: 14px; background: #9C0003; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 8px; left: ${location.x}%; top: ${location.y}%; color: white; font-weight: bold;`;
+                marker.innerHTML = '!';
+                
+                marker.addEventListener('mouseenter', () => {
+                    const tooltip = document.createElement('div');
+                    tooltip.style.cssText = `background: #1A1A1A; color: ${currentColor}; padding: 4px; border-radius: 1px; font-size: 10px; border: 1px solid ${currentColor}; position: absolute; z-index: 10; white-space: nowrap; left: ${location.x + 2}%; top: ${location.y - 8}%;`;
+                    tooltip.innerHTML = location.name;
+                    mapDiv.appendChild(tooltip);
+                });
+                
+                marker.addEventListener('mouseleave', () => {
+                    mapDiv.querySelectorAll('div[style*="z-index: 10"]').forEach(t => t.remove());
+                });
+                
+                mapDiv.appendChild(marker);
+            });
+        }
+
+        function loadPlaylist() {
+            const playlist = document.getElementById('playlist');
+            // Mapping titles to real audio content streams (synth/ambient tracks suitable for background atmosphere)
+            const tracks = [
+                { title: 'DARKNESS FALLS', url: 'https://actions.google.com/sounds/v1/ambiences/ambient_hum_air_conditioner.ogg' },
+                { title: 'GOTHAM NIGHTS', url: 'https://actions.google.com/sounds/v1/ambiences/dark_room.ogg' },
+                { title: 'VIGILANTE THEME', url: 'https://actions.google.com/sounds/v1/ambiences/industrial_substation_hum.ogg' },
+                { title: 'SHADOW WALKER', url: 'https://actions.google.com/sounds/v1/ambiences/underwater_space.ogg' }
+            ];
+            
+            playlist.innerHTML = '';
+            tracks.forEach(track => {
+                const item = document.createElement('div');
+                item.style.cssText = `background: transparent; padding: 6px; margin: 3px 0; cursor: pointer; font-size: 11px; border-left: 2px solid ${currentColor}; padding-left: 8px; transition: 0.15s; color: ${currentColor};`;
+                item.innerHTML = track.title;
+                item.onmouseover = () => item.style.background = 'rgba(255, 255, 255, 0.05)';
+                item.onmouseout = () => item.style.background = 'transparent';
+                item.onclick = () => {
+                    document.querySelectorAll('#playlist > div').forEach(p => { p.style.background = 'transparent'; p.style.fontWeight = 'normal'; });
+                    item.style.background = 'rgba(255, 255, 255, 0.1)';
+                    item.style.fontWeight = 'bold';
+                    
+                    const player = document.getElementById('audioPlayer');
+                    player.src = track.url;
+                    player.play();
+                };
+                playlist.appendChild(item);
+            });
+        }
+
+        function loadWayneData() {
+            const announcements = document.getElementById('announcements');
+            const news = ['New AI Defense System', 'Q3 Facility Expansion', 'Renewable Energy Breakthrough', 'Global Partnership Initiative'];
+            announcements.innerHTML = '';
+            news.forEach(item => {
+                const newsItem = document.createElement('div');
+                newsItem.style.cssText = `background: #1A1A1A; padding: 6px; margin: 4px 0; border-radius: 1px; border-left: 2px solid ${currentColor}; color: ${currentColor}; font-size: 10px;`;
+                newsItem.innerHTML = item;
+                announcements.appendChild(newsItem);
+            });
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'green';
+            document.getElementById('themeSelector').value = savedTheme;
+            changeTheme(savedTheme);
+            renderTasks();
+            renderMessages();
+        });
+    </script>
+</body>
+</html>

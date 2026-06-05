@@ -31,10 +31,10 @@ The entry point leverages a luxury color scheme—utilizing clean linear-gradien
 * **Native Event Listening:** A global keypress event listener handles keyboard inputs seamlessly. You can submit credentials instantly by pressing the Enter key from any active form field.
 
 #### Verified Security Clearance Tokens:
-| Access Clearance | Employee ID (Username) | Secure Password | Target Environment |
-| :--- | :--- | :--- | :--- |
-| **Tactical Override** | batman | 2089 | dashboard_final.html |
-| **Corporate Override** | wayne | enterprises | dashboard_final.html |
+| Employee ID (Username) | Secure Password | Target Environment |
+| :--- | :--- | :--- |
+| batman | 2089 | dashboard_final.html |
+| wayne | enterprises | dashboard_final.html |
 
 ---
 

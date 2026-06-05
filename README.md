@@ -66,7 +66,7 @@ At the top-right menu array, an interactive Theme Selector updates high-visibili
 
 #### EQUIPMENT (Asset Allocation Diagnostics)
 * **Functional Flow:** Click any asset module grid card (BATMOBILE, BATPLANE, BATSUIT, GRAPPLE GUN, SCANNER, SMOKE BOMB).
-* **Logic Highlight:** Triggers a state pipeline switching status from READY to DEPLOYING... with fluid background alpha-blending shifts. An asynchronous 5-second timer (setTimeout) executes to simulate structural deployment lag. Upon full completion, the UI completely flips style vectors to an inverse solid high-visibility block labeled DEPLOYED. Clicking it a second time cleanly disarms the asset back to READY.
+* **Logic Highlight:** Triggers a state pipeline switching status from READY to DEPLOYING... with fluid background alpha-blending shifts. An asynchronous 5-second timer (setTimeout) executes to simulate structural deployment lag. Upon full completion, the UI completely flips style vectors to an inverse solid high-visibility block . Clicking it a second time cleanly disarms the asset back to READY.
 
 #### MAP (Gotham Vector Spatial Grid)
 * **Functional Flow:** Selecting this tab dynamically loops through structural geolocation objects, inserting live hazard nodes across coordinate paths.
